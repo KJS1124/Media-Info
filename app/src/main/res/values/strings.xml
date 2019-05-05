@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Media Info</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment2">Hello blank fragment</string>
+
+    <string name="app_title">Media Info</string>
+</resources>
