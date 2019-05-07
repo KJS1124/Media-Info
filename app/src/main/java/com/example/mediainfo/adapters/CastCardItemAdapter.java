@@ -1,6 +1,8 @@
 package com.example.mediainfo.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,8 +23,7 @@ public class CastCardItemAdapter extends RecyclerView.Adapter<CastCardItemAdapte
     private List<CastCardDetails> list;
     private CastItemCardListner mClickListner;
 
-    public CastCardItemAdapter(List<CastCardDetails> list,CastItemCardListner mClickListner ){
-        this.list = list;
+    public CastCardItemAdapter(CastItemCardListner mClickListner ){
         this.mClickListner = mClickListner;
     }
 
@@ -46,6 +45,11 @@ public class CastCardItemAdapter extends RecyclerView.Adapter<CastCardItemAdapte
     @Override
     public int getItemCount() {
         return list==null?0:list.size();
+    }
+
+    public void setData(List<CastCardDetails> list){
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     public interface CastItemCardListner {

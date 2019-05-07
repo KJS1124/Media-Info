@@ -1,13 +1,25 @@
 package com.example.mediainfo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
+import com.example.mediainfo.adapters.ListItemCardAdarpter;
+import com.example.mediainfo.decorator.GridSpacingItemDecoration;
+import com.example.mediainfo.models.CardDetails;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -18,7 +30,7 @@ import androidx.fragment.app.Fragment;
  * Use the {@link MovieFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MovieFragment extends Fragment {
+public class MovieFragment extends Fragment implements ListItemCardAdarpter.ItemCardListner {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +41,11 @@ public class MovieFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    RecyclerView mRecyclerView;
+    ProgressBar mPB;
+    TextView mError;
+
 
     public MovieFragment() {
         // Required empty public constructor
@@ -65,13 +82,33 @@ public class MovieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_movie, container, false);
+        final RecyclerView mRecyclerView = view.findViewById(R.id.rv_movie);
+        RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, GridSpacingItemDecoration.dpToPx(10), true));
+        mRecyclerView.setLayoutManager(manager);
+        final ListItemCardAdarpter adapter = new ListItemCardAdarpter(this);
+        mRecyclerView.setAdapter(adapter);
+
+        List<CardDetails> details = new ArrayList<>();
+        details.add(new CardDetails("hello2","Second","https://image.shutterstock.com/image-vector/two-cinema-vector-tickets-isolated-450w-739876768.jpg","12/12/2019"));
+
+        details.add(new CardDetails("hello2","Second","https://image.shutterstock.com/image-vector/two-cinema-vector-tickets-isolated-450w-739876768.jpg","12/12/2019"));
+
+        details.add(new CardDetails("hello2","Second","https://image.shutterstock.com/image-vector/two-cinema-vector-tickets-isolated-450w-739876768.jpg","12/12/2019"));
+
+        details.add(new CardDetails("hello2","Second","https://image.shutterstock.com/image-vector/two-cinema-vector-tickets-isolated-450w-739876768.jpg","12/12/2019"));
+
+        adapter.setData(details);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(String id) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(id);
         }
     }
 
@@ -92,6 +129,11 @@ public class MovieFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void click(CardDetails cardDetails) {
+        this.mListener.onFragmentInteraction(cardDetails.getId());
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -104,6 +146,6 @@ public class MovieFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String id);
     }
 }

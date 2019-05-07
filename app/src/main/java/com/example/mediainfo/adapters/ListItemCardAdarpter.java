@@ -1,6 +1,11 @@
 package com.example.mediainfo.adapters;
 
 import android.content.Context;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +18,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,12 +26,11 @@ public class ListItemCardAdarpter extends RecyclerView.Adapter<ListItemCardAdarp
     private List<CardDetails> list;
     private ItemCardListner mClickListner;
 
-    public interface ItemCardListner{
+    public interface ItemCardListner {
         void click(CardDetails cardDetails);
     }
 
-    public ListItemCardAdarpter(List<CardDetails> list,ItemCardListner mClickListner){
-        this.list = list;
+    public ListItemCardAdarpter(ItemCardListner mClickListner) {
         this.mClickListner = mClickListner;
     }
 
@@ -42,14 +44,19 @@ public class ListItemCardAdarpter extends RecyclerView.Adapter<ListItemCardAdarp
         return itemCardViewHolder;
     }
 
+    public void setData(List<CardDetails> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ListItemCardViewHolder itemCardViewHolder, int i) {
-
+        itemCardViewHolder.bind(list.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return list==null?0:list.size();
+        return list == null ? 0 : list.size();
     }
 
     public class ListItemCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -63,13 +70,18 @@ public class ListItemCardAdarpter extends RecyclerView.Adapter<ListItemCardAdarp
         @BindView(R.id.card_list_item_date)
         TextView mDate;
 
+        @BindView(R.id.list_card_layout)
+        CardView layout;
+
         public ListItemCardViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
+            layout.setOnClickListener(this);
         }
 
-        public void bind(CardDetails cardDetails){
-            Picasso.get().load(cardDetails.getImage()).error(0).into(mThumbnail);
+        public void bind(CardDetails cardDetails) {
+            System.out.println(cardDetails);
+            Picasso.get().load(R.drawable.ic_launcher_background).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(mThumbnail);
             mTitle.setText(cardDetails.getName());
             mDate.setText(cardDetails.getDate());
         }
