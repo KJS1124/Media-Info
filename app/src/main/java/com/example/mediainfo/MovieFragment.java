@@ -1,25 +1,29 @@
 package com.example.mediainfo;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.mediainfo.adapters.ListItemCardAdarpter;
 import com.example.mediainfo.decorator.GridSpacingItemDecoration;
 import com.example.mediainfo.models.CardDetails;
+import com.example.mediainfo.utils.RetrofitServices;
+import com.example.mediainfo.wrapper.CommonListFragment;
+import com.example.mediainfo.wrapper.ResultWrapper;
 
-import java.util.ArrayList;
-import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -30,7 +34,7 @@ import java.util.List;
  * Use the {@link MovieFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MovieFragment extends Fragment implements ListItemCardAdarpter.ItemCardListner {
+public class MovieFragment extends Fragment implements ListItemCardAdarpter.ItemCardListner, CommonListFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,16 +43,21 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private boolean isScrolling=false;
+    private ListItemCardAdarpter adapter;
+    private RecyclerView.LayoutManager manager;
 
     private OnFragmentInteractionListener mListener;
 
     RecyclerView mRecyclerView;
     ProgressBar mPB;
     TextView mError;
+    boolean isPopular= false;
+
 
 
     public MovieFragment() {
-        // Required empty public constructor
+        // Required empty public constructo
     }
 
     /**
@@ -84,23 +93,15 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
-        final RecyclerView mRecyclerView = view.findViewById(R.id.rv_movie);
-        RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
+        this.mRecyclerView = view.findViewById(R.id.rv_movie);
+        this.mPB = view.findViewById(R.id.pb_loading);
+        this.manager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, GridSpacingItemDecoration.dpToPx(10), true));
         mRecyclerView.setLayoutManager(manager);
-        final ListItemCardAdarpter adapter = new ListItemCardAdarpter(this);
+        this.adapter = new ListItemCardAdarpter(this);
         mRecyclerView.setAdapter(adapter);
 
-        List<CardDetails> details = new ArrayList<>();
-        details.add(new CardDetails("hello2","Second","https://image.shutterstock.com/image-vector/two-cinema-vector-tickets-isolated-450w-739876768.jpg","12/12/2019"));
-
-        details.add(new CardDetails("hello2","Second","https://image.shutterstock.com/image-vector/two-cinema-vector-tickets-isolated-450w-739876768.jpg","12/12/2019"));
-
-        details.add(new CardDetails("hello2","Second","https://image.shutterstock.com/image-vector/two-cinema-vector-tickets-isolated-450w-739876768.jpg","12/12/2019"));
-
-        details.add(new CardDetails("hello2","Second","https://image.shutterstock.com/image-vector/two-cinema-vector-tickets-isolated-450w-739876768.jpg","12/12/2019"));
-
-        adapter.setData(details);
+        createList(isPopular);
 
         return view;
     }
@@ -108,7 +109,7 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String id) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(id);
+            mListener.onFragmentInteraction(id,"movie");
         }
     }
 
@@ -131,7 +132,7 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
 
     @Override
     public void click(CardDetails cardDetails) {
-        this.mListener.onFragmentInteraction(cardDetails.getId());
+        this.mListener.onFragmentInteraction(cardDetails.getId(),"movie");
     }
 
     /**
@@ -146,6 +147,72 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(String id);
+        void onFragmentInteraction(String id,String controller);
+    }
+
+    Callback<ResultWrapper> firstCallBack = new Callback<ResultWrapper>() {
+        @Override
+        public void onResponse(Call<ResultWrapper> call, Response<ResultWrapper> response) {
+            ResultWrapper data = response.body();
+            Log.d("data", "onResponse: "+data.getResults());
+            adapter.setData(data.getResults());
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                        isScrolling = true;
+
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if(isScrolling && (manager.getChildCount()+((GridLayoutManager) manager).findFirstVisibleItemPosition() == manager.getItemCount())){
+                        isScrolling = false;
+                        mPB.setVisibility(View.VISIBLE);
+                        if(isPopular)
+                        RetrofitServices.getMovieService().popularMovieAndPage((manager.getItemCount()/20)+1)
+                                .enqueue(pagesCallback);
+                        else
+                            RetrofitServices.getMovieService().topMovieAndPage((manager.getItemCount()/20)+1)
+                                    .enqueue(pagesCallback);
+
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(Call<ResultWrapper> call, Throwable t) {
+            Log.i("Failure in api", "onFailure: "+ t);
+        }
+    };
+
+
+    Callback<ResultWrapper> pagesCallback = new Callback<ResultWrapper>() {
+
+        @Override
+        public void onResponse(Call<ResultWrapper> call, Response<ResultWrapper> response) {
+            ResultWrapper data = response.body();
+            Log.d("data", "onResponse: "+data.getResults());
+            adapter.appendData(data.getResults());
+            mPB.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onFailure(Call<ResultWrapper> call, Throwable t) {
+            mPB.setVisibility(View.GONE);
+        }
+    };
+
+    @Override
+    public void createList(boolean isPopular) {
+        this.isPopular = !isPopular;
+        if(isPopular) {
+            RetrofitServices.getMovieService().popularMovie().enqueue(firstCallBack);
+        } else {
+            RetrofitServices.getMovieService().topMovie().enqueue(firstCallBack);
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.mediainfo.R;
 import com.example.mediainfo.models.CardDetails;
+import com.example.mediainfo.utils.URLUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -25,6 +27,8 @@ public class ListItemCardAdarpter extends RecyclerView.Adapter<ListItemCardAdarp
 
     private List<CardDetails> list;
     private ItemCardListner mClickListner;
+
+
 
     public interface ItemCardListner {
         void click(CardDetails cardDetails);
@@ -46,6 +50,11 @@ public class ListItemCardAdarpter extends RecyclerView.Adapter<ListItemCardAdarp
 
     public void setData(List<CardDetails> list) {
         this.list = list;
+        notifyDataSetChanged();
+    }
+
+    public void appendData(List<CardDetails> results) {
+        this.list.addAll(results);
         notifyDataSetChanged();
     }
 
@@ -80,8 +89,9 @@ public class ListItemCardAdarpter extends RecyclerView.Adapter<ListItemCardAdarp
         }
 
         public void bind(CardDetails cardDetails) {
-            System.out.println(cardDetails);
-            Picasso.get().load(R.drawable.ic_launcher_background).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(mThumbnail);
+            Log.i("Bind Details", "bind: "+cardDetails);
+            Log.d("ListItemCard Image url", String.valueOf(URLUtils.getImageUrl(cardDetails.getImage())));
+            Picasso.get().load(String.valueOf(URLUtils.getImageUrl(cardDetails.getImage().replace("/","")))).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(mThumbnail);
             mTitle.setText(cardDetails.getName());
             mDate.setText(cardDetails.getDate());
         }

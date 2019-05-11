@@ -4,12 +4,14 @@ import com.example.mediainfo.models.CardDetails;
 import com.example.mediainfo.models.Movie;
 import com.example.mediainfo.models.Review;
 import com.example.mediainfo.models.Video;
+import com.example.mediainfo.wrapper.ResultWrapper;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface MovieApiInterface {
 
@@ -21,10 +23,16 @@ public interface MovieApiInterface {
     public static final String REVIEW_PATH_PARAM = "reviews";
 
     @GET(POPULAR_MOVIE_PATH_PARAM+"?"+KEY_PARAM+"="+API_KEY)
-    Call<List<CardDetails>> popularMovie();
+    Call<ResultWrapper> popularMovie();
+
+    @GET(POPULAR_MOVIE_PATH_PARAM+"?"+KEY_PARAM+"="+API_KEY)
+    Call<ResultWrapper> popularMovieAndPage(@Query("page") int page);
 
     @GET(TOP_MOVIE_PATH_PARAM+"?"+KEY_PARAM+"="+API_KEY)
-    Call<List<CardDetails>> topMovie();
+    Call<ResultWrapper> topMovie();
+
+    @GET(TOP_MOVIE_PATH_PARAM+"?"+KEY_PARAM+"="+API_KEY)
+    Call<ResultWrapper> topMovieAndPage(@Query("page")int page);
 
     @GET("{id}"+"?"+KEY_PARAM+"="+API_KEY)
     Call<Movie> movie(@Path("id") String id);

@@ -3,4 +3,6 @@
     <dimen name="card_elevation">4dp</dimen>
     <dimen name="AppTitleTextSize">20dp</dimen>
     <dimen name="pb_size">40dp</dimen>
+    <dimen name="main_activity_margin_top">104dp</dimen>
+    <dimen name="minmum_height_detail_card">100dp</dimen>
 </resources>

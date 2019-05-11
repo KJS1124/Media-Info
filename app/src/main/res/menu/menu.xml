@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/famous_titlebar_icon"
+        app:showAsAction="always"
+        android:checkable="true"
+        android:title="@string/famous_menu_title"
+        android:icon="@drawable/ic_star_black_24dp"
+        android:orderInCategory="1"
+        >
+
+    </item>
+</menu>

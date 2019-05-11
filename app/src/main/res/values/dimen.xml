@@ -9,7 +9,7 @@
     <dimen name="backdrop_subtitle">18dp</dimen>
     <dimen name="card_margin">5dp</dimen>
     <dimen name="card_album_radius">0dp</dimen>
-    <dimen name="item_cover_height">160dp</dimen>
+    <dimen name="item_cover_height">260dp</dimen>
     <dimen name="item_title_padding">10dp</dimen>
     <dimen name="item_title">15dp</dimen>
     <dimen name="item_count_padding_bottom">5dp</dimen>

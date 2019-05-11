@@ -3,6 +3,7 @@ package com.example.mediainfo.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.mediainfo.R;
 import com.example.mediainfo.models.CastCardDetails;
+import com.example.mediainfo.utils.URLUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -72,7 +74,8 @@ public class CastCardItemAdapter extends RecyclerView.Adapter<CastCardItemAdapte
         }
 
         public void bind(CastCardDetails cardDetails) {
-            Picasso.get().load(cardDetails.getImage()).error(0).into(mThumbnail);
+            Log.i("Bind Details", "bind: "+cardDetails);
+            Picasso.get().load(String.valueOf(URLUtils.getImageUrl(cardDetails.getImage().replace("/","")))).error(0).into(mThumbnail);
             mTitle.setText(cardDetails.getName());
 
         }

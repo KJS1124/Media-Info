@@ -21,7 +21,7 @@
         android:visibility="invisible"
         android:layout_gravity="center" />
     <ProgressBar
-        android:id="@+id/pb_loading"
+        android:id="@+id/tv_pb_loading"
         android:layout_width="@dimen/pb_size"
         android:layout_height="@dimen/pb_size"
         android:visibility="invisible"

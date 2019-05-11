@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_cover_height"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
             android:scaleType="fitXY" />
 
         <TextView

@@ -1,9 +1,14 @@
 package com.example.mediainfo.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CardDetails {
     String id;
+    @SerializedName(value = "name",alternate = "title")
     String name;
+    @SerializedName("poster_path")
     String image;
+    @SerializedName("first_air_date")
     String date;
 
     public CardDetails() {
