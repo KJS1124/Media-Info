@@ -1,11 +1,9 @@
 package com.example.mediainfo.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,10 +26,14 @@ public class ListItemCardAdarpter extends RecyclerView.Adapter<ListItemCardAdarp
     private List<CardDetails> list;
     private ItemCardListner mClickListner;
 
+    public List<CardDetails> getData() {
+        return this.list;
+    }
 
 
     public interface ItemCardListner {
         void click(CardDetails cardDetails);
+        void clickFav(CardDetails cardDetails);
     }
 
     public ListItemCardAdarpter(ItemCardListner mClickListner) {
@@ -82,10 +84,19 @@ public class ListItemCardAdarpter extends RecyclerView.Adapter<ListItemCardAdarp
         @BindView(R.id.list_card_layout)
         CardView layout;
 
+        @BindView(R.id.favorite)
+        ImageView mFavIcon;
+
         public ListItemCardViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             layout.setOnClickListener(this);
+            mFavIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListner.clickFav(list.get(getAdapterPosition()));
+                }
+            });
         }
 
         public void bind(CardDetails cardDetails) {

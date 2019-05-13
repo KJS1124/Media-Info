@@ -1,4 +1,4 @@
-package com.example.mediainfo;
+package com.example.mediainfo.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.AbsListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.mediainfo.R;
 import com.example.mediainfo.adapters.ListItemCardAdarpter;
 import com.example.mediainfo.decorator.GridSpacingItemDecoration;
 import com.example.mediainfo.models.CardDetails;
@@ -29,12 +30,12 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MovieFragment.OnFragmentInteractionListener} interface
+ * {@link TVSeriesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MovieFragment#newInstance} factory method to
+ * Use the {@link TVSeriesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MovieFragment extends Fragment implements ListItemCardAdarpter.ItemCardListner, CommonListFragment {
+public class TVSeriesFragment extends Fragment implements ListItemCardAdarpter.ItemCardListner, CommonListFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,18 +47,16 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
     private boolean isScrolling=false;
     private ListItemCardAdarpter adapter;
     private RecyclerView.LayoutManager manager;
-
-    private OnFragmentInteractionListener mListener;
-
     RecyclerView mRecyclerView;
     ProgressBar mPB;
     TextView mError;
-    boolean isPopular= false;
 
 
+    private OnFragmentInteractionListener mListener;
+    private boolean isPopular = false;
 
-    public MovieFragment() {
-        // Required empty public constructo
+    public TVSeriesFragment() {
+        // Required empty public constructor
     }
 
     /**
@@ -66,11 +65,11 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MovieFragment.
+     * @return A new instance of fragment TVSeriesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MovieFragment newInstance(String param1, String param2) {
-        MovieFragment fragment = new MovieFragment();
+    public static TVSeriesFragment newInstance(String param1, String param2) {
+        TVSeriesFragment fragment = new TVSeriesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -91,16 +90,14 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View view = inflater.inflate(R.layout.fragment_movie, container, false);
-        this.mRecyclerView = view.findViewById(R.id.rv_movie);
-        this.mPB = view.findViewById(R.id.pb_loading);
+        View view = inflater.inflate(R.layout.fragment_tvseries, container, false);
+        this.mRecyclerView = view.findViewById(R.id.rv_tvseries);
+        this.mPB = view.findViewById(R.id.tv_pb_loading);
         this.manager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, GridSpacingItemDecoration.dpToPx(10), true));
         mRecyclerView.setLayoutManager(manager);
         this.adapter = new ListItemCardAdarpter(this);
         mRecyclerView.setAdapter(adapter);
-
         createList(isPopular);
 
         return view;
@@ -109,7 +106,7 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String id) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(id,"movie");
+            mListener.onFragmentInteraction(id,"TV");
         }
     }
 
@@ -132,7 +129,12 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
 
     @Override
     public void click(CardDetails cardDetails) {
-        this.mListener.onFragmentInteraction(cardDetails.getId(),"movie");
+        this.mListener.onFragmentInteraction(cardDetails.getId(),"TV");
+    }
+
+    @Override
+    public void clickFav(CardDetails cardDetails) {
+        mListener.clickOnIcon(cardDetails,"TV");
     }
 
     /**
@@ -148,7 +150,9 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String id,String controller);
+        void clickOnIcon(CardDetails cardDetails,String controller);
     }
+
 
     Callback<ResultWrapper> firstCallBack = new Callback<ResultWrapper>() {
         @Override
@@ -172,12 +176,11 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
                         isScrolling = false;
                         mPB.setVisibility(View.VISIBLE);
                         if(isPopular)
-                        RetrofitServices.getMovieService().popularMovieAndPage((manager.getItemCount()/20)+1)
+                        RetrofitServices.getTVService().popularTvAndPage((manager.getItemCount()/20)+1)
                                 .enqueue(pagesCallback);
                         else
-                            RetrofitServices.getMovieService().topMovieAndPage((manager.getItemCount()/20)+1)
+                            RetrofitServices.getTVService().topTVAndPage((manager.getItemCount()/20)+1)
                                     .enqueue(pagesCallback);
-
                     }
                 }
             });
@@ -210,9 +213,9 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
     public void createList(boolean isPopular) {
         this.isPopular = !isPopular;
         if(isPopular) {
-            RetrofitServices.getMovieService().popularMovie().enqueue(firstCallBack);
+            RetrofitServices.getTVService().popularTV().enqueue(firstCallBack);
         } else {
-            RetrofitServices.getMovieService().topMovie().enqueue(firstCallBack);
+            RetrofitServices.getTVService().topTV().enqueue(firstCallBack);
         }
     }
 }

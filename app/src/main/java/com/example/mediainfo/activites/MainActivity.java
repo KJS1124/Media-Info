@@ -1,4 +1,4 @@
-package com.example.mediainfo;
+package com.example.mediainfo.activites;
 
 
 import android.annotation.SuppressLint;
@@ -18,6 +18,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.mediainfo.R;
+import com.example.mediainfo.asynctaks.CardDetailsAsyncTask;
+import com.example.mediainfo.fragment.FavouriteFragment;
+import com.example.mediainfo.fragment.MovieFragment;
+import com.example.mediainfo.fragment.TVSeriesFragment;
+import com.example.mediainfo.models.CardDetails;
 import com.example.mediainfo.wrapper.CommonListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,13 +35,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieFragment.OnFragmentInteractionListener
-        , TVSeriesFragment.OnFragmentInteractionListener {
+        , TVSeriesFragment.OnFragmentInteractionListener, FavouriteFragment.OnFragmentInteractionListener {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     ViewPagerAdapter adapter;
-    private boolean isPopular = true;
+    private boolean isPopular = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         registerTopics();
         registerInstanceFirebaseMessaging();
@@ -100,16 +107,39 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MovieFragment(), "Movies");
         adapter.addFragment(new TVSeriesFragment(), "TV Series");
+        adapter.addFragment(new FavouriteFragment(), "Favourite");
         viewPager.setAdapter(adapter);
     }
 
     @Override
-    public void onFragmentInteraction(String id,String controller) {
-        Log.i("Click on item", "onFragmentInteraction: "+id);
-        Intent intent = new Intent(MainActivity.this,DetailActivity.class);
-        intent.putExtra(DetailActivity.INTENT_DATA,id);
-        intent.putExtra(DetailActivity.INTENT_CONTROLLER_DATA,controller);
+    public void onFragmentInteraction(String id, String controller) {
+        Log.i("Click on item", "onFragmentInteraction: " + id);
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        intent.putExtra(DetailActivity.INTENT_DATA, id);
+        intent.putExtra(DetailActivity.INTENT_CONTROLLER_DATA, controller);
         startActivity(intent);
+    }
+
+    @Override
+    public void clickOnIcon(CardDetails cardDetails,String controller) {
+        CardDetailsAsyncTask asyncTask = new CardDetailsAsyncTask(getApplicationContext());
+        cardDetails.setType(controller);
+        asyncTask.saveDetails(cardDetails);
+    }
+
+    @Override
+    public void favCardsListner(CardDetails cardDetails) {
+        Log.i("Click on item", "onFragmentInteraction: " + cardDetails.getId());
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        intent.putExtra(DetailActivity.INTENT_DATA, cardDetails.getId());
+        intent.putExtra(DetailActivity.INTENT_CONTROLLER_DATA, cardDetails.getType());
+        startActivity(intent);
+    }
+
+    @Override
+    public void clickOnDelete(CardDetails cardDetails) {
+        CardDetailsAsyncTask asyncTask = new CardDetailsAsyncTask(getApplicationContext());
+        asyncTask.deleteDetails(cardDetails);
     }
 
 
@@ -147,17 +177,16 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
 
-        inflater.inflate(R.menu.menu,menu);
+        inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.famous_titlebar_icon)
-        {
-            Toast.makeText(this,""+isPopular,Toast.LENGTH_LONG).show();
+        if (item.getItemId() == R.id.famous_titlebar_icon) {
+            Toast.makeText(this, "" + isPopular, Toast.LENGTH_LONG).show();
             isPopular = !isPopular;
-            for(Fragment fragment : adapter.mFragmentList){
+            for (Fragment fragment : adapter.mFragmentList) {
                 CommonListFragment fragment1 = (CommonListFragment) fragment;
                 fragment1.createList(isPopular);
             }
@@ -166,4 +195,6 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

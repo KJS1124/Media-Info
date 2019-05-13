@@ -1,7 +1,8 @@
-package com.example.mediainfo;
+package com.example.mediainfo.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,12 +15,15 @@ import android.widget.AbsListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.mediainfo.R;
 import com.example.mediainfo.adapters.ListItemCardAdarpter;
 import com.example.mediainfo.decorator.GridSpacingItemDecoration;
 import com.example.mediainfo.models.CardDetails;
 import com.example.mediainfo.utils.RetrofitServices;
 import com.example.mediainfo.wrapper.CommonListFragment;
 import com.example.mediainfo.wrapper.ResultWrapper;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,12 +33,12 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TVSeriesFragment.OnFragmentInteractionListener} interface
+ * {@link MovieFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TVSeriesFragment#newInstance} factory method to
+ * Use the {@link MovieFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TVSeriesFragment extends Fragment implements ListItemCardAdarpter.ItemCardListner, CommonListFragment {
+public class MovieFragment extends Fragment implements ListItemCardAdarpter.ItemCardListner, CommonListFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,16 +50,18 @@ public class TVSeriesFragment extends Fragment implements ListItemCardAdarpter.I
     private boolean isScrolling=false;
     private ListItemCardAdarpter adapter;
     private RecyclerView.LayoutManager manager;
+
+    private OnFragmentInteractionListener mListener;
+
     RecyclerView mRecyclerView;
     ProgressBar mPB;
     TextView mError;
+    boolean isPopular= false;
 
 
-    private OnFragmentInteractionListener mListener;
-    private boolean isPopular = false;
 
-    public TVSeriesFragment() {
-        // Required empty public constructor
+    public MovieFragment() {
+        // Required empty public constructo
     }
 
     /**
@@ -64,11 +70,11 @@ public class TVSeriesFragment extends Fragment implements ListItemCardAdarpter.I
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TVSeriesFragment.
+     * @return A new instance of fragment MovieFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TVSeriesFragment newInstance(String param1, String param2) {
-        TVSeriesFragment fragment = new TVSeriesFragment();
+    public static MovieFragment newInstance(String param1, String param2) {
+        MovieFragment fragment = new MovieFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -83,29 +89,39 @@ public class TVSeriesFragment extends Fragment implements ListItemCardAdarpter.I
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        if(savedInstanceState!=null)
+            Log.i("Test", "onCreate: ");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tvseries, container, false);
-        this.mRecyclerView = view.findViewById(R.id.rv_tvseries);
-        this.mPB = view.findViewById(R.id.tv_pb_loading);
+
+        View view = inflater.inflate(R.layout.fragment_movie, container, false);
+
+        this.mRecyclerView = view.findViewById(R.id.rv_movie);
+        this.mPB = view.findViewById(R.id.pb_loading);
         this.manager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, GridSpacingItemDecoration.dpToPx(10), true));
         mRecyclerView.setLayoutManager(manager);
         this.adapter = new ListItemCardAdarpter(this);
         mRecyclerView.setAdapter(adapter);
-        createList(isPopular);
+        Log.i("Test", "onCreateView: "+savedInstanceState);
 
+        if(savedInstanceState!=null){
+            isPopular = savedInstanceState.getBoolean("isPopular");
+            adapter.setData(savedInstanceState.getParcelableArrayList("data"));
+        } else{
+            createList(isPopular);
+        }
         return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String id) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(id,"TV");
+            mListener.onFragmentInteraction(id,"movie");
         }
     }
 
@@ -128,7 +144,12 @@ public class TVSeriesFragment extends Fragment implements ListItemCardAdarpter.I
 
     @Override
     public void click(CardDetails cardDetails) {
-        this.mListener.onFragmentInteraction(cardDetails.getId(),"TV");
+        this.mListener.onFragmentInteraction(cardDetails.getId(),"movie");
+    }
+
+    @Override
+    public void clickFav(CardDetails cardDetails) {
+        mListener.clickOnIcon(cardDetails,"MOVIE");
     }
 
     /**
@@ -144,8 +165,8 @@ public class TVSeriesFragment extends Fragment implements ListItemCardAdarpter.I
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String id,String controller);
+        void clickOnIcon(CardDetails cardDetails,String controller);
     }
-
 
     Callback<ResultWrapper> firstCallBack = new Callback<ResultWrapper>() {
         @Override
@@ -169,11 +190,12 @@ public class TVSeriesFragment extends Fragment implements ListItemCardAdarpter.I
                         isScrolling = false;
                         mPB.setVisibility(View.VISIBLE);
                         if(isPopular)
-                        RetrofitServices.getTVService().popularTvAndPage((manager.getItemCount()/20)+1)
+                        RetrofitServices.getMovieService().popularMovieAndPage((manager.getItemCount()/20)+1)
                                 .enqueue(pagesCallback);
                         else
-                            RetrofitServices.getTVService().topTVAndPage((manager.getItemCount()/20)+1)
+                            RetrofitServices.getMovieService().topMovieAndPage((manager.getItemCount()/20)+1)
                                     .enqueue(pagesCallback);
+
                     }
                 }
             });
@@ -202,13 +224,32 @@ public class TVSeriesFragment extends Fragment implements ListItemCardAdarpter.I
         }
     };
 
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList("data",  new ArrayList<>(adapter.getData()));
+        outState.putBoolean("isPopular", isPopular);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("Test", "onDestroy: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i("Test", "onStop: ");
+    }
+
     @Override
     public void createList(boolean isPopular) {
         this.isPopular = !isPopular;
         if(isPopular) {
-            RetrofitServices.getTVService().popularTV().enqueue(firstCallBack);
+            RetrofitServices.getMovieService().popularMovie().enqueue(firstCallBack);
         } else {
-            RetrofitServices.getTVService().topTV().enqueue(firstCallBack);
+            RetrofitServices.getMovieService().topMovie().enqueue(firstCallBack);
         }
     }
 }

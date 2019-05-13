@@ -4,34 +4,30 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
-public class Movie {
-    int id;
-    String title;
-    int voteCount;
-    double voteAvg;
-    double popularity;
-    String image;
-    String lang;
-    String overview;
-    String releaseDate;
-    String backDropPath;
+import java.util.List;
 
-    @Ignore
-    public Movie(String title, int voteCount, double voteAvg, double popularity, String image, String lang, String overview, String releaseDate, String backDropPath) {
-        this.title = title;
-        this.voteCount = voteCount;
-        this.voteAvg = voteAvg;
-        this.popularity = popularity;
-        this.image = image;
-        this.lang = lang;
-        this.overview = overview;
-        this.releaseDate = releaseDate;
-        this.backDropPath = backDropPath;
+public class TVSeries {
+    private int id;
+    @SerializedName("name")
+    private String title;
+    private int voteCount;
+    private double voteAvg;
+    private double popularity;
+    @SerializedName("poster_path")
+    private String image;
+    private String lang;
+    private String overview;
+    private String releaseDate;
+    private String backDropPath;
+    private List<Season> seasons;
+
+
+    public TVSeries() {
     }
 
-    public Movie(int id, String title, int voteCount, double voteAvg, double popularity, String image, String lang, String overview, String releaseDate, String backDropPath) {
+    public TVSeries(int id, String title, int voteCount, double voteAvg, double popularity, String image, String lang, String overview, String releaseDate, String backDropPath, List<Season> seasons) {
         this.id = id;
         this.title = title;
         this.voteCount = voteCount;
@@ -42,10 +38,15 @@ public class Movie {
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.backDropPath = backDropPath;
+        this.seasons = seasons;
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -120,10 +121,19 @@ public class Movie {
         this.backDropPath = backDropPath;
     }
 
+    public List<Season> getSeasons() {
+        return seasons;
+    }
+
+    public void setSeasons(List<Season> seasons) {
+        this.seasons = seasons;
+    }
+
     @Override
     public String toString() {
-        return "Movie{" +
-                "title='" + title + '\'' +
+        return "TVSeries{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", voteCount=" + voteCount +
                 ", voteAvg=" + voteAvg +
                 ", popularity=" + popularity +
@@ -132,6 +142,8 @@ public class Movie {
                 ", overview='" + overview + '\'' +
                 ", releaseDate='" + releaseDate + '\'' +
                 ", backDropPath='" + backDropPath + '\'' +
+                ", seasons=" + seasons +
                 '}';
     }
 }
+

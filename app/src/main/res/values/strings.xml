@@ -13,4 +13,6 @@
     <string name="overview_title">Overview</string>
     <string name="trailers_title">Trailers</string>
     <string name="cast_title_text">Cast</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

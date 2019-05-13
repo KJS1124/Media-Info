@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailActivity">
+    tools:context=".activites.DetailActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -52,11 +52,13 @@
 
         </android.support.design.widget.AppBarLayout>
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabbutton_widgit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             app:layout_anchor="@+id/appbarlayout"
             android:src="@drawable/ic_widgets_black_24dp"
+            android:visibility="invisible"
             app:layout_anchorGravity="bottom|right|end" />
     </android.support.design.widget.CoordinatorLayout>
 
