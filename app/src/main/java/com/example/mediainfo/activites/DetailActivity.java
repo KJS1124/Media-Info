@@ -50,7 +50,8 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
         mImageView = findViewById(R.id.photo);
         FragmentManager manager = getSupportFragmentManager();
         Toast.makeText(getApplicationContext(),id + controller , Toast.LENGTH_LONG).show();
-        manager.beginTransaction().add(R.id.fragment,DetailFragment.newInstance(id,controller))
+        manager.beginTransaction()
+                .add(R.id.detailed_fragment_container,DetailFragment.newInstance(id,controller))
                 .commit();
         fabButton = findViewById(R.id.fabbutton_widgit);
         if(controller.toUpperCase().equals("TV")){

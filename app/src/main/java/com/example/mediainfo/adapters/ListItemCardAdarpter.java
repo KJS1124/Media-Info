@@ -102,7 +102,14 @@ public class ListItemCardAdarpter extends RecyclerView.Adapter<ListItemCardAdarp
         public void bind(CardDetails cardDetails) {
             Log.i("Bind Details", "bind: "+cardDetails);
             Log.d("ListItemCard Image url", String.valueOf(URLUtils.getImageUrl(cardDetails.getImage())));
-            Picasso.get().load(String.valueOf(URLUtils.getImageUrl(cardDetails.getImage().replace("/","")))).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(mThumbnail);
+            if(cardDetails.getImage()!=null)
+                Picasso.get()
+                        .load(String.valueOf(URLUtils
+                                .getImageUrl(cardDetails.getImage()
+                                        .replace("/",""))))
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_background)
+                        .into(mThumbnail);
             mTitle.setText(cardDetails.getName());
             mDate.setText(cardDetails.getDate());
         }

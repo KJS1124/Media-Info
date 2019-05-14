@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <TextView
-        android:id="@+id/overview_contnent"
+        android:id="@+id/overview_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/overview_contnent">
+        app:layout_constraintTop_toBottomOf="@+id/overview_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,11 +68,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="TextView"
+                android:text="@string/season_title"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/no_of_seasons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -81,10 +81,7 @@
 
 
         </LinearLayout>
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -92,15 +89,15 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="TextView"
+                android:text="@string/episodes"
+
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/no_of_episode"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -130,7 +127,9 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="@+id/trailer_titles"
         app:layout_constraintStart_toStartOf="@+id/trailer_titles"
-        app:layout_constraintTop_toBottomOf="@+id/trailer_titles" />
+        app:layout_constraintTop_toBottomOf="@+id/trailer_titles" >
+
+    </android.support.v7.widget.RecyclerView>
 
     <TextView
         android:id="@+id/cast_title"
@@ -138,8 +137,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:gravity="left"
         android:layout_marginEnd="8dp"
+        android:gravity="left"
         android:text="@string/cast_title_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -152,6 +151,33 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/cast_title"
         app:layout_constraintStart_toStartOf="@+id/cast_title"
-        app:layout_constraintTop_toBottomOf="@+id/cast_title" />
+        app:layout_constraintTop_toBottomOf="@+id/cast_title" >
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_cast" />
+
 
 </android.support.constraint.ConstraintLayout>

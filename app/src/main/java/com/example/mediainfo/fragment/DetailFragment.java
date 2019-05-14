@@ -4,11 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.mediainfo.R;
+import com.example.mediainfo.models.TVSeries;
+import com.example.mediainfo.utils.RetrofitServices;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -24,10 +35,24 @@ public class DetailFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = DetailFragment.class.getSimpleName();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.overview_content)
+    TextView overview;
+    @BindView(R.id.no_of_seasons)
+    TextView noOfSeasons;
+    @BindView(R.id.no_of_episode)
+    TextView noOFEpisodes;
+    @BindView(R.id.rv_trailers)
+    RecyclerView mRVtrailers;
+    @BindView(R.id.rv_cast)
+    RecyclerView mRVCast;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,8 +91,35 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+        ButterKnife.bind(this,view);
 
-        return inflater.inflate(R.layout.fragment_detail, container, false);
+        String id = getArguments().getString(ARG_PARAM1);
+        String controller = getArguments().getString(ARG_PARAM2);
+
+        if(controller.toUpperCase().equals("TV")){
+            RetrofitServices.getTVService().getTVSeries(id).enqueue(new Callback<TVSeries>() {
+                @Override
+                public void onResponse(Call<TVSeries> call, Response<TVSeries> response) {
+
+                    TVSeries series = response.body();
+                    Log.i(TAG, "onResponse: "+ series);
+                    title.setText(series.getTitle());
+                    overview.setText(series.getOverview());
+                    //noOfSeasons.setText(series.getSeasons().size()-1);
+
+
+                }
+
+                @Override
+                public void onFailure(Call<TVSeries> call, Throwable t) {
+
+                }
+            });
+        } else {
+
+        }
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

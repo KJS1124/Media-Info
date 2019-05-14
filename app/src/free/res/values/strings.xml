@@ -1,10 +1,4 @@
 <resources>
-    <string name="app_name">Media Info</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hello_blank_fragment2">Tv Series</string>
-
     <string name="app_title">Media Info</string>
     <string name="msg_subscribe_failed">Unable to Subsribe To topic</string>
     <string name="msg_subscribed">SuccessFully Subscribed To Topic</string>
@@ -13,8 +7,6 @@
     <string name="overview_title">Overview</string>
     <string name="trailers_title">Trailers</string>
     <string name="cast_title_text">Cast</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="season_title">Season</string>
-    <string name="episodes">Episodes</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="indestrial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

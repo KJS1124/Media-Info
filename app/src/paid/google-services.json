@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "331027668632",
+    "firebase_url": "https://media-info-paid.firebaseio.com",
+    "project_id": "media-info-paid",
+    "storage_bucket": "media-info-paid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331027668632:android:457945c087ff2004",
+        "android_client_info": {
+          "package_name": "com.example.mediainfo.paid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "331027668632-t9ua8rppf75o2im9e939hhljhfffbpcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABiGDEryE610sIQav-lVdg6Tify6NOILw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "331027668632-t9ua8rppf75o2im9e939hhljhfffbpcu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
