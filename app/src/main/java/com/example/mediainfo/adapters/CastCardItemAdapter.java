@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mediainfo.R;
+import com.example.mediainfo.models.Cast;
 import com.example.mediainfo.models.CastCardDetails;
 import com.example.mediainfo.utils.URLUtils;
 import com.squareup.picasso.Picasso;
@@ -19,22 +20,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CastCardItemAdapter extends RecyclerView.Adapter<CastCardItemAdapter.CastListItemCardViewHolder> {
 
-    private List<CastCardDetails> list;
-    private CastItemCardListner mClickListner;
+    private List<Cast> list;
 
-    public CastCardItemAdapter(CastItemCardListner mClickListner ){
-        this.mClickListner = mClickListner;
-    }
 
     @NonNull
     @Override
     public CastListItemCardViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.card_list_item, viewGroup, false);
+        View view = inflater.inflate(R.layout.cast_card_list_item, viewGroup, false);
         CastListItemCardViewHolder itemCardViewHolder = new CastListItemCardViewHolder(view);
         return itemCardViewHolder;
     }
@@ -46,10 +44,10 @@ public class CastCardItemAdapter extends RecyclerView.Adapter<CastCardItemAdapte
 
     @Override
     public int getItemCount() {
-        return list==null?0:list.size();
+        return list == null ? 0 : list.size();
     }
 
-    public void setData(List<CastCardDetails> list){
+    public void setData(List<Cast> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -59,11 +57,10 @@ public class CastCardItemAdapter extends RecyclerView.Adapter<CastCardItemAdapte
     }
 
 
-
-    public class CastListItemCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CastListItemCardViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.cast_list_item_thumbnail)
-        ImageView mThumbnail;
+        CircleImageView mThumbnail;
 
         @BindView(R.id.cast_list_item_name)
         TextView mTitle;
@@ -73,17 +70,17 @@ public class CastCardItemAdapter extends RecyclerView.Adapter<CastCardItemAdapte
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(CastCardDetails cardDetails) {
-            Log.i("Bind Details", "bind: "+cardDetails);
-            Picasso.get().load(String.valueOf(URLUtils.getImageUrl(cardDetails.getImage().replace("/","")))).error(0).into(mThumbnail);
+        public void bind(Cast cardDetails) {
+            Log.i("Bind Details", "bind: " + cardDetails);
+            try {
+                Picasso.get().load(String.valueOf(URLUtils.getImageUrl(cardDetails.getProfile_path().replace("/", "")))).into(mThumbnail);
+            } catch (Exception e) {
+                Log.e("Bind Details", "bind: " + e);
+            }
             mTitle.setText(cardDetails.getName());
 
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            mClickListner.click(list.get(position));
-        }
+
     }
 }

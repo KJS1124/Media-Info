@@ -227,6 +227,7 @@ public class MovieFragment extends Fragment implements ListItemCardAdarpter.Item
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.i("Test", "onSaveInstanceState: " + outState);
         outState.putParcelableArrayList("data",  new ArrayList<>(adapter.getData()));
         outState.putBoolean("isPopular", isPopular);
     }

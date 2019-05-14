@@ -3,6 +3,7 @@ package com.example.mediainfo.activites;
 import android.appwidget.AppWidgetManager;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import com.example.mediainfo.models.Movie;
 import com.example.mediainfo.widgit.EpisodeWidgit;
 import com.example.mediainfo.R;
 import com.example.mediainfo.fragment.DetailFragment;
@@ -48,7 +51,11 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
         String id = getIntent().getStringExtra(INTENT_DATA);
         String controller = getIntent().getStringExtra(INTENT_CONTROLLER_DATA);
         mImageView = findViewById(R.id.photo);
+        setSupportActionBar(findViewById(R.id.toolbarDetail));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         FragmentManager manager = getSupportFragmentManager();
+
         Toast.makeText(getApplicationContext(),id + controller , Toast.LENGTH_LONG).show();
         manager.beginTransaction()
                 .add(R.id.detailed_fragment_container,DetailFragment.newInstance(id,controller))
@@ -60,6 +67,7 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
                 public void onResponse(Call<TVSeries> call, Response<TVSeries> response) {
                     TVSeries tvSeries = response.body();
                     Log.i(TAG, "onResponse: " + tvSeries);
+                    ((CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout)).setTitle(tvSeries.getTitle());
                     Picasso.get()
                             .load(String.valueOf(URLUtils.getImageUrl(tvSeries
                                     .getImage().replace("/",""))))
@@ -97,7 +105,18 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
             });
         }
         else{
+            RetrofitServices.getMovieService().movie(id).enqueue(new Callback<Movie>() {
+                @Override
+                public void onResponse(Call<Movie> call, Response<Movie> response) {
+                    Movie movie = response.body();
+                    ((CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout)).setTitle(movie.getTitle());
+                }
 
+                @Override
+                public void onFailure(Call<Movie> call, Throwable t) {
+
+                }
+            });
         }
 
 

@@ -1,8 +1,12 @@
 package com.example.mediainfo.utils;
 
+import com.example.mediainfo.models.Cast;
 import com.example.mediainfo.models.TVSeries;
+import com.example.mediainfo.wrapper.CastWrapper;
 import com.example.mediainfo.wrapper.EpisodeResult;
 import com.example.mediainfo.wrapper.ResultWrapper;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -31,6 +35,10 @@ public interface TVAPIInterface {
 
     @GET("{id}"+"?"+KEY_PARAM+"="+API_KEY)
     Call<TVSeries> getTVSeries(@Path("id") String id);
+
+    @GET("{id}/credits"+"?"+KEY_PARAM+"="+API_KEY)
+    Call<CastWrapper> getCast(@Path("id") int id);
+
 
     @GET("{id}/season/{id1}"+"?"+KEY_PARAM+"="+API_KEY)
     Call<EpisodeResult> getEpisodes(@Path("id")int id,@Path("id1") int id1);

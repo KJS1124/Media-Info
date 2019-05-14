@@ -22,6 +22,7 @@ public class TVSeries {
     private String releaseDate;
     private String backDropPath;
     private List<Season> seasons;
+    private List<Cast> cast;
 
 
     public TVSeries() {

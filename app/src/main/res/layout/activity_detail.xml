@@ -11,29 +11,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="4dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="408dp">
+        >
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbarlayout"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginTop="0dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:layout_constraintTop_toTopOf="@+id/fragment">
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:collapsedTitleGravity="center"
-
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <FrameLayout
                     android:id="@+id/photo_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    app:layout_collapseMode="parallax">
                     <!--suppress AndroidLintContentDescription -->
                     <ImageView
                         android:id="@+id/photo"
@@ -47,13 +44,26 @@
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbarDetail"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:minHeight="?attr/actionBarSize"
-                    android:paddingTop="30dp"
+                    android:layout_height="?attr/actionBarSize"
+                    app:contentInsetStart="@dimen/content_inset_start"
                     app:layout_collapseMode="pin" />
             </android.support.design.widget.CollapsingToolbarLayout>
 
         </android.support.design.widget.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <FrameLayout
+                android:id="@+id/detailed_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true" />
+
+        </ScrollView>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabbutton_widgit"
@@ -63,18 +73,11 @@
             android:src="@drawable/ic_widgets_black_24dp"
             android:visibility="invisible"
             app:layout_anchor="@+id/appbarlayout"
+            android:layout_marginEnd="@dimen/fab_button_margin_end"
             app:layout_anchorGravity="bottom|right|end" />
+
+
     </android.support.design.widget.CoordinatorLayout>
-
-    <FrameLayout
-        android:id="@+id/detailed_fragment_container"
-        android:nestedScrollingEnabled="true"
-        android:layout_width="match_parent"
-        android:layout_height="426dp"
-        android:layout_marginTop="648dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout" />
-
 
 
 </android.support.constraint.ConstraintLayout>

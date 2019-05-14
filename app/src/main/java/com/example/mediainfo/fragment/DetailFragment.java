@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +14,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mediainfo.R;
+import com.example.mediainfo.adapters.CastCardItemAdapter;
+import com.example.mediainfo.adapters.ListItemCardAdarpter;
+import com.example.mediainfo.models.Cast;
+import com.example.mediainfo.models.Movie;
 import com.example.mediainfo.models.TVSeries;
 import com.example.mediainfo.utils.RetrofitServices;
+import com.example.mediainfo.wrapper.CastWrapper;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,8 +50,6 @@ public class DetailFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    @BindView(R.id.title)
-    TextView title;
     @BindView(R.id.overview_content)
     TextView overview;
     @BindView(R.id.no_of_seasons)
@@ -92,22 +99,41 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
         String id = getArguments().getString(ARG_PARAM1);
         String controller = getArguments().getString(ARG_PARAM2);
 
-        if(controller.toUpperCase().equals("TV")){
+        if (controller.toUpperCase().equals("TV")) {
             RetrofitServices.getTVService().getTVSeries(id).enqueue(new Callback<TVSeries>() {
                 @Override
                 public void onResponse(Call<TVSeries> call, Response<TVSeries> response) {
 
                     TVSeries series = response.body();
-                    Log.i(TAG, "onResponse: "+ series);
-                    title.setText(series.getTitle());
+                    Log.i(TAG, "onResponse: " + series);
                     overview.setText(series.getOverview());
-                    //noOfSeasons.setText(series.getSeasons().size()-1);
 
+                    noOFEpisodes.setVisibility(View.VISIBLE);
+                    noOfSeasons.setVisibility(View.VISIBLE);
+                    noOfSeasons.setText(String.valueOf(series.getSeasons().size() - 1));
+                    LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                    mRVCast.setLayoutManager(manager);
+                    CastCardItemAdapter adapter = new CastCardItemAdapter();
+                    RetrofitServices.getTVService().getCast(series.getId()).enqueue(new Callback<CastWrapper>() {
+                        @Override
+                        public void onResponse(Call<CastWrapper> call, Response<CastWrapper> response) {
+                            CastWrapper wrapper = response.body();
+                            List<Cast> cast = wrapper.getCast();
+                            Log.i(TAG, "onResponse: " + cast);
+                            adapter.setData(cast);
+                        }
+
+                        @Override
+                        public void onFailure(Call<CastWrapper> call, Throwable t) {
+
+                        }
+                    });
+                    mRVCast.setAdapter(adapter);
 
                 }
 
@@ -117,7 +143,20 @@ public class DetailFragment extends Fragment {
                 }
             });
         } else {
+            RetrofitServices.getMovieService().movie(id).enqueue(new Callback<Movie>() {
+                @Override
+                public void onResponse(Call<Movie> call, Response<Movie> response) {
+                    Movie movie = response.body();
+                    overview.setText(movie.getOverview());
+                    noOFEpisodes.setVisibility(View.GONE);
+                    noOfSeasons.setVisibility(View.GONE);
+                }
 
+                @Override
+                public void onFailure(Call<Movie> call, Throwable t) {
+
+                }
+            });
         }
         return view;
     }
