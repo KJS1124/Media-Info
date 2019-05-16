@@ -15,6 +15,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory">
+        <activity android:name=".activites.SettingActivity"
+            android:label="@string/setting"
+            >
+        </activity>
+
         <receiver android:name=".widgit.EpisodeWidgit">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

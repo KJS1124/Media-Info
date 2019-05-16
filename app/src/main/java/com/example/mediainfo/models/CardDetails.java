@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity(tableName = "details")
 public class CardDetails implements Parcelable {
 
@@ -119,5 +121,18 @@ public class CardDetails implements Parcelable {
         dest.writeString(image);
         dest.writeString(date);
         dest.writeString(type);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CardDetails that = (CardDetails) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

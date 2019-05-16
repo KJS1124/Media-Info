@@ -8,6 +8,11 @@
         android:icon="@drawable/ic_star_black_24dp"
         android:orderInCategory="1"
         >
-
     </item>
+    <item
+        android:id="@+id/setting"
+        android:title="@string/setting"
+        app:showAsAction="never"
+        android:orderInCategory="1000"
+        />
 </menu>

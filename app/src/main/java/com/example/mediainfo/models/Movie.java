@@ -4,7 +4,10 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Movie {
     int id;
@@ -12,6 +15,7 @@ public class Movie {
     int voteCount;
     double voteAvg;
     double popularity;
+    @SerializedName("poster_path")
     String image;
     String lang;
     String overview;
@@ -133,5 +137,18 @@ public class Movie {
                 ", releaseDate='" + releaseDate + '\'' +
                 ", backDropPath='" + backDropPath + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(title, movie.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title);
     }
 }

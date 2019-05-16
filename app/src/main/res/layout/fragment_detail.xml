@@ -25,73 +25,101 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
         android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/cardView_season_data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/overview_title"
         app:layout_constraintTop_toBottomOf="@+id/overview_title" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/cardView_season_data"
         android:layout_width="match_parent"
         android:layout_height="@dimen/card_height_for_tv_details"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="@dimen/margin_top_card_tv_details"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:minHeight="@dimen/minmum_height_detail_card"
         android:orientation="horizontal"
         android:weightSum="2"
+        app:layout_constraintBottom_toTopOf="@+id/trailer_titles"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/overview_content">
+        app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/textView6"
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/season_title"
-                android:textAlignment="center" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/no_of_seasons"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textAlignment="center" />
+                <TextView
+                    android:id="@+id/no_season_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="26dp"
+                    android:text="@string/season_title"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/no_of_seasons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-        </LinearLayout>
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/no_season_title" />
+            </android.support.constraint.ConstraintLayout>
 
-        <LinearLayout
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
-            <TextView
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/episodes"
+                android:layout_height="match_parent">
 
-                android:textAlignment="center" />
+                <TextView
+                    android:id="@+id/no_episode_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/episodes"
+                    android:textAlignment="center"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/no_of_episode"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textAlignment="center" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/no_of_episode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/no_episode_title"
+                    tools:layout_editor_absoluteX="0dp" />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 
     <TextView
@@ -99,10 +127,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:gravity="left"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="left"
         android:text="@string/trailers_title"
+        app:layout_constraintBottom_toTopOf="@+id/rv_trailers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -112,11 +142,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/cast_title"
         app:layout_constraintEnd_toEndOf="@+id/trailer_titles"
-        app:layout_constraintStart_toStartOf="@+id/trailer_titles"
-        app:layout_constraintTop_toBottomOf="@+id/trailer_titles">
+        app:layout_constraintStart_toStartOf="@+id/trailer_titles">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -125,23 +155,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textSize="@dimen/title_height"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:gravity="left"
         android:text="@string/cast_title_text"
+        android:textSize="@dimen/title_height"
+        app:layout_constraintBottom_toTopOf="@+id/rv_cast"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_trailers" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_cast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/cast_title"
-        app:layout_constraintStart_toStartOf="@+id/cast_title"
-        app:layout_constraintTop_toBottomOf="@+id/cast_title" >
+        app:layout_constraintStart_toStartOf="@+id/cast_title">
 
     </android.support.v7.widget.RecyclerView>
 

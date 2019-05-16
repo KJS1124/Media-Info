@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mediainfo.R;
@@ -60,6 +61,14 @@ public class DetailFragment extends Fragment {
     RecyclerView mRVtrailers;
     @BindView(R.id.rv_cast)
     RecyclerView mRVCast;
+    @BindView(R.id.cardView_season_data)
+    LinearLayout layout;
+    @BindView(R.id.no_season_title)
+    TextView noSeasonTitle;
+
+    @BindView(R.id.no_episode_title)
+    TextView noEpisodeTitle;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -148,8 +157,8 @@ public class DetailFragment extends Fragment {
                 public void onResponse(Call<Movie> call, Response<Movie> response) {
                     Movie movie = response.body();
                     overview.setText(movie.getOverview());
-                    noOFEpisodes.setVisibility(View.GONE);
-                    noOfSeasons.setVisibility(View.GONE);
+                    layout.setVisibility(View.INVISIBLE);
+
                 }
 
                 @Override
@@ -178,7 +187,10 @@ public class DetailFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
+    public void setEpisodeCount(int count){
+        if(noOFEpisodes!=null)
+            noOFEpisodes.setText(String.valueOf(count==0?"Please Try Later":count-1));
+    }
     @Override
     public void onDetach() {
         super.onDetach();

@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
         intent.putExtra(DetailActivity.INTENT_DATA, id);
         intent.putExtra(DetailActivity.INTENT_CONTROLLER_DATA, controller);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
@@ -191,6 +192,10 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
                 fragment1.createList(isPopular);
             }
 
+            return true;
+        } else if (item.getItemId() == R.id.setting) {
+            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -55,10 +55,10 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FragmentManager manager = getSupportFragmentManager();
-
+        DetailFragment fragment = DetailFragment.newInstance(id,controller);
         Toast.makeText(getApplicationContext(),id + controller , Toast.LENGTH_LONG).show();
         manager.beginTransaction()
-                .add(R.id.detailed_fragment_container,DetailFragment.newInstance(id,controller))
+                .add(R.id.detailed_fragment_container,fragment)
                 .commit();
         fabButton = findViewById(R.id.fabbutton_widgit);
         if(controller.toUpperCase().equals("TV")){
@@ -75,9 +75,10 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
                             .error(R.drawable.ic_launcher_background).into(mImageView);
 
                     for(Season season : tvSeries.getSeasons()){
-                        RetrofitServices.getTVService().getEpisodes(tvSeries.getId(),season.getId());
+                        RetrofitServices.getTVService().getEpisodes(tvSeries.getId(),season.getId()).enqueue(episodeCallback);
                     }
 
+                    fragment.setEpisodeCount(episodes.size());
                     fabButton.show();
                     fabButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -109,7 +110,13 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
                 @Override
                 public void onResponse(Call<Movie> call, Response<Movie> response) {
                     Movie movie = response.body();
+                    Log.i(TAG, "onResponse: "+movie);
                     ((CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout)).setTitle(movie.getTitle());
+                    Picasso.get()
+                            .load(String.valueOf(URLUtils.getImageUrl(movie
+                                    .getImage().replace("/",""))))
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .error(R.drawable.ic_launcher_background).into(mImageView);
                 }
 
                 @Override
@@ -126,12 +133,13 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
         @Override
         public void onResponse(Call<EpisodeResult> call, Response<EpisodeResult> response) {
             EpisodeResult episodesResult = response.body();
-            episodes.addAll(episodesResult.getEpisodes());
+            if(episodesResult!=null && episodesResult.getEpisodes() !=null)
+                episodes.addAll(episodesResult.getEpisodes());
         }
 
         @Override
         public void onFailure(Call<EpisodeResult> call, Throwable t) {
-
+            Log.i(TAG, "onFailure: " + t);
         }
     };
 

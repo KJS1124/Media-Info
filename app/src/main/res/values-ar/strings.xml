@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">معلومات الوسائط</string>
+    <string name="setting">ضبط</string>
+    <string name="app_title">معلومات الوسائط</string>
+    <string name="msg_subscribe_failed">غير قادر على الاشتراك في الموضوع</string>
+    <string name="msg_subscribed">SuccessFully مشترك في الموضوع</string>
+    <string name="msg_token_fmt">format_for_token</string>
+    <string name="famous_menu_title">أعلى التقييمات</string>
+    <string name="overview_title">نظرة عامة</string>
+    <string name="trailers_title">مقطورة</string>
+    <string name="cast_title_text">المصبوب</string>
+    <string name="appwidget_text">مثال</string>
+    <string name="add_widget">إضافة القطعة</string>
+    <string name="season_title">الموسم</string>
+    <string name="episodes">الحلقات</string>
+    <string name="preference_summarynotification">notification are on</string>
+    <string name="preferance_summary_on_notification">notifications are off</string>
+    <string name="notification_key">notification</string>
+    <string name="notfication_title">notification</string>
+
+</resources>

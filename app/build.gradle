@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'media'
+            keyPassword '19701910'
+            storeFile file('D:/Learning/Android/Media Info/signing.jks')
+            storePassword '19701910'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.mediainfo"
@@ -15,6 +23,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     compileOptions {
@@ -36,6 +45,7 @@ android {
 com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:exifinterface:28.0.0'
     implementation 'com.android.support:animated-vector-drawable:28.0.0'
@@ -62,4 +72,5 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.0'
     implementation 'android.arch.lifecycle:viewmodel:1.1.0'
     freeImplementation 'com.google.android.gms:play-services-ads:17.2.0'
+    implementation 'com.android.support:preference-v7:28.0.0'
 }
