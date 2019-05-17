@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
     }
 
     @Override
-    public void clickOnIcon(CardDetails cardDetails,String controller) {
+    public void clickOnIcon(CardDetails cardDetails, String controller) {
         CardDetailsAsyncTask asyncTask = new CardDetailsAsyncTask(getApplicationContext());
         cardDetails.setType(controller);
         asyncTask.saveDetails(cardDetails);
@@ -196,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
         } else if (item.getItemId() == R.id.setting) {
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(intent);
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -17,4 +17,7 @@
     <string name="preferance_summary_on_notification">notifications are off</string>
     <string name="notification_key">notification</string>
     <string name="notfication_title">notification</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

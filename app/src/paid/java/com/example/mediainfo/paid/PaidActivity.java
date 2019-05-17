@@ -1,5 +1,4 @@
-package com.example.mediainfo.free;
-
+package com.example.mediainfo.paid;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -20,16 +19,13 @@ import android.widget.Toast;
 
 import com.example.mediainfo.R;
 import com.example.mediainfo.activites.DetailActivity;
+import com.example.mediainfo.activites.SettingActivity;
 import com.example.mediainfo.asynctaks.CardDetailsAsyncTask;
 import com.example.mediainfo.fragment.FavouriteFragment;
 import com.example.mediainfo.fragment.MovieFragment;
 import com.example.mediainfo.fragment.TVSeriesFragment;
 import com.example.mediainfo.models.CardDetails;
 import com.example.mediainfo.wrapper.CommonListFragment;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -39,26 +35,20 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MovieFragment.OnFragmentInteractionListener
+
+public class PaidActivity extends AppCompatActivity implements MovieFragment.OnFragmentInteractionListener
         , TVSeriesFragment.OnFragmentInteractionListener, FavouriteFragment.OnFragmentInteractionListener {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     ViewPagerAdapter adapter;
-
-    InterstitialAd mInterstitialAd;
     private boolean isPopular = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        mAdView.loadAd(adRequest);
+        setContentView(R.layout.activity_paid);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
                         @SuppressLint({"StringFormatInvalid", "LocalSuppress"})
                         String msg = getString(R.string.msg_token_fmt, token);
                         Log.d("Cloud Messaging", msg);
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -109,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
                             msg = getString(R.string.msg_subscribe_failed);
                         }
                         Log.d("Failed", msg);
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -125,11 +113,16 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
 
     @Override
     public void onFragmentInteraction(String id, String controller) {
-        setupInterstitialAds(id,controller);
+        Log.i("Click on item", "onFragmentInteraction: " + id);
+        Intent intent = new Intent(PaidActivity.this, DetailActivity.class);
+        intent.putExtra(DetailActivity.INTENT_DATA, id);
+        intent.putExtra(DetailActivity.INTENT_CONTROLLER_DATA, controller);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
-    public void clickOnIcon(CardDetails cardDetails,String controller) {
+    public void clickOnIcon(CardDetails cardDetails, String controller) {
         CardDetailsAsyncTask asyncTask = new CardDetailsAsyncTask(getApplicationContext());
         cardDetails.setType(controller);
         asyncTask.saveDetails(cardDetails);
@@ -137,7 +130,11 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
 
     @Override
     public void favCardsListner(CardDetails cardDetails) {
-        setupInterstitialAds(cardDetails.getId(),cardDetails.getType());
+        Log.i("Click on item", "onFragmentInteraction: " + cardDetails.getId());
+        Intent intent = new Intent(PaidActivity.this, DetailActivity.class);
+        intent.putExtra(DetailActivity.INTENT_DATA, cardDetails.getId());
+        intent.putExtra(DetailActivity.INTENT_CONTROLLER_DATA, cardDetails.getType());
+        startActivity(intent);
     }
 
     @Override
@@ -196,33 +193,12 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.OnF
             }
 
             return true;
+        } else if (item.getItemId() == R.id.setting) {
+            Intent intent = new Intent(PaidActivity.this, SettingActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    private void setupInterstitialAds(String data,String controller) {
-        mInterstitialAd = new InterstitialAd(getApplicationContext());
-        mInterstitialAd.setAdUnitId(getApplication().getString(R.string.indestrial_ad_unit_id ));
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                Log.i("Click on item", "onFragmentInteraction: " + data);
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra(DetailActivity.INTENT_DATA, data);
-                intent.putExtra(DetailActivity.INTENT_CONTROLLER_DATA, controller);
-                startActivity(intent);
-            }
-        });
-        requestNewInterstitial();
-    }
-
-    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-
-        mInterstitialAd.loadAd(adRequest);
-    }
 }

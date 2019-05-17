@@ -1,12 +1,4 @@
 <resources>
-    <string name="app_title">Media Info</string>
-    <string name="msg_subscribe_failed">Unable to Subsribe To topic</string>
-    <string name="msg_subscribed">SuccessFully Subscribed To Topic</string>
-    <string name="msg_token_fmt">format_for_token</string>
-    <string name="famous_menu_title">Top_Rated</string>
-    <string name="overview_title">Overview</string>
-    <string name="trailers_title">Trailers</string>
-    <string name="cast_title_text">Cast</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="indestrial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="indestrial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

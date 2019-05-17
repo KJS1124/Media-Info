@@ -56,7 +56,6 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
 
         FragmentManager manager = getSupportFragmentManager();
         DetailFragment fragment = DetailFragment.newInstance(id,controller);
-        Toast.makeText(getApplicationContext(),id + controller , Toast.LENGTH_LONG).show();
         manager.beginTransaction()
                 .add(R.id.detailed_fragment_container,fragment)
                 .commit();
