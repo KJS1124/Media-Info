@@ -45,7 +45,8 @@
         app:layout_constraintBottom_toTopOf="@+id/trailer_titles"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside">
 
         <android.support.v7.widget.CardView
             android:id="@+id/cardView"
@@ -126,21 +127,16 @@
         android:id="@+id/trailer_titles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:gravity="left"
         android:text="@string/trailers_title"
         app:layout_constraintBottom_toTopOf="@+id/rv_trailers"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        tools:layout_editor_absoluteX="8dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_trailers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/video_recycler_view_height"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"

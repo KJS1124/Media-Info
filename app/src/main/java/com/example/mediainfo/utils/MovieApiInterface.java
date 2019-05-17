@@ -5,6 +5,7 @@ import com.example.mediainfo.models.Movie;
 import com.example.mediainfo.models.Review;
 import com.example.mediainfo.models.Video;
 import com.example.mediainfo.wrapper.ResultWrapper;
+import com.example.mediainfo.wrapper.VideoWrapper;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public interface MovieApiInterface {
     Call<Movie> movie(@Path("id") String id);
 
     @GET("{id}/"+VIDEOS_PATH_PARAM+"?"+KEY_PARAM+"="+API_KEY)
-    Call<List<Video>> videos(@Path("id") String id);
+    Call<VideoWrapper> videos(@Path("id") String id);
 
     @GET("{id}/"+REVIEW_PATH_PARAM+"?"+KEY_PARAM+"="+API_KEY)
     Call<List<Review>> reviews(@Path("id") String id);

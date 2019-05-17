@@ -17,11 +17,14 @@ import android.widget.TextView;
 import com.example.mediainfo.R;
 import com.example.mediainfo.adapters.CastCardItemAdapter;
 import com.example.mediainfo.adapters.ListItemCardAdarpter;
+import com.example.mediainfo.adapters.VideoAdapter;
 import com.example.mediainfo.models.Cast;
 import com.example.mediainfo.models.Movie;
 import com.example.mediainfo.models.TVSeries;
+import com.example.mediainfo.models.Video;
 import com.example.mediainfo.utils.RetrofitServices;
 import com.example.mediainfo.wrapper.CastWrapper;
+import com.example.mediainfo.wrapper.VideoWrapper;
 
 import java.util.List;
 
@@ -40,7 +43,7 @@ import retrofit2.Response;
  * Use the {@link DetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements VideoAdapter.CustomClickListner {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,6 +68,11 @@ public class DetailFragment extends Fragment {
     LinearLayout layout;
     @BindView(R.id.no_season_title)
     TextView noSeasonTitle;
+    @BindView(R.id.trailer_titles)
+    TextView trailerTitle;
+    @BindView(R.id.cast_title)
+    TextView castTitle;
+
 
     @BindView(R.id.no_episode_title)
     TextView noEpisodeTitle;
@@ -109,7 +117,7 @@ public class DetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
-
+        VideoAdapter.CustomClickListner listner = this;
         String id = getArguments().getString(ARG_PARAM1);
         String controller = getArguments().getString(ARG_PARAM2);
 
@@ -124,6 +132,8 @@ public class DetailFragment extends Fragment {
 
                     noOFEpisodes.setVisibility(View.VISIBLE);
                     noOfSeasons.setVisibility(View.VISIBLE);
+                    trailerTitle.setVisibility(View.GONE);
+                    mRVtrailers.setVisibility(View.GONE);
                     noOfSeasons.setText(String.valueOf(series.getSeasons().size() - 1));
                     LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                     mRVCast.setLayoutManager(manager);
@@ -158,6 +168,23 @@ public class DetailFragment extends Fragment {
                     Movie movie = response.body();
                     overview.setText(movie.getOverview());
                     layout.setVisibility(View.INVISIBLE);
+                    castTitle.setVisibility(View.GONE);
+                    RetrofitServices.getMovieService().videos(id).enqueue(new Callback<VideoWrapper>() {
+                        @Override
+                        public void onResponse(Call<VideoWrapper> call, Response<VideoWrapper> response) {
+                            Log.i("TEsting", "onResponse: "+response.body());
+                            LinearLayoutManager manager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+                            mRVtrailers.setLayoutManager(manager);
+                            VideoWrapper wrapper = response.body();;
+                            List<Video> videos = wrapper.getResults();
+                            mRVtrailers.setAdapter(new VideoAdapter(videos,listner));
+                        }
+
+                        @Override
+                        public void onFailure(Call<VideoWrapper> call, Throwable throwable) {
+                            Log.i("TEsting", "onFailure: "+throwable);
+                        }
+                    });
 
                 }
 
@@ -171,9 +198,9 @@ public class DetailFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(Video video) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(video);
         }
     }
 
@@ -197,6 +224,11 @@ public class DetailFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(Video video) {
+        mListener.onFragmentInteraction(video);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -209,6 +241,6 @@ public class DetailFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Video video);
     }
 }

@@ -1,20 +1,25 @@
 package com.example.mediainfo.activites;
 
 import android.appwidget.AppWidgetManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.mediainfo.adapters.VideoAdapter;
 import com.example.mediainfo.models.Movie;
+import com.example.mediainfo.models.Video;
 import com.example.mediainfo.widgit.EpisodeWidgit;
 import com.example.mediainfo.R;
 import com.example.mediainfo.fragment.DetailFragment;
@@ -52,7 +57,6 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
         String controller = getIntent().getStringExtra(INTENT_CONTROLLER_DATA);
         mImageView = findViewById(R.id.photo);
         setSupportActionBar(findViewById(R.id.toolbarDetail));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FragmentManager manager = getSupportFragmentManager();
         DetailFragment fragment = DetailFragment.newInstance(id,controller);
@@ -141,9 +145,10 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
             Log.i(TAG, "onFailure: " + t);
         }
     };
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
+  @Override
+    public void onFragmentInteraction(Video video) {
+      Intent intent = new Intent(Intent.ACTION_VIEW, VideoAdapter.getYoutubeVideoUrl(video.getKey()));
+      if(intent.resolveActivity(getPackageManager()) != null)
+          startActivity(intent);
     }
 }
